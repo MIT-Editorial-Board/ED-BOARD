@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 interface TypingAnimationProps {
   text: string;
@@ -7,41 +7,47 @@ interface TypingAnimationProps {
   className?: string;
 }
 
-const TypingAnimation: React.FC<TypingAnimationProps> = ({ 
-  text, 
-  typingSpeed = 100, 
+const TypingAnimation = ({
+  text,
+  typingSpeed = 100,
   delay = 0,
-  className = ""
-}) => {
+  className = "",
+}: TypingAnimationProps) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    
-    // Initial delay before typing starts
-    timeout = setTimeout(() => {
+    let intervalId: number | undefined;
+
+    const timeoutId = window.setTimeout(() => {
       setIsTyping(true);
-      
+
       let currentIndex = 0;
-      const intervalId = setInterval(() => {
+
+      intervalId = window.setInterval(() => {
         if (currentIndex < text.length) {
           setDisplayedText(text.slice(0, currentIndex + 1));
-          currentIndex++;
+          currentIndex += 1;
         } else {
-          clearInterval(intervalId);
+          window.clearInterval(intervalId);
           setIsTyping(false);
         }
       }, typingSpeed);
-      
-      return () => clearInterval(intervalId);
     }, delay);
-    
-    return () => clearTimeout(timeout);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+
+      if (intervalId !== undefined) {
+        window.clearInterval(intervalId);
+      }
+    };
   }, [text, typingSpeed, delay]);
 
   return (
-    <span className={`typing-text ${className}`}>
+    <span
+      className={`typing-text ${isTyping ? "is-typing" : ""} ${className}`}
+    >
       {displayedText}
     </span>
   );
