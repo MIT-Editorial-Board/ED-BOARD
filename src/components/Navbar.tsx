@@ -1,14 +1,37 @@
-import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { ChevronDown, X, Menu } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { ChevronDown, Menu, X } from "lucide-react";
 
 const APPLY_URL = "https://forms.gle/sArbt8gRsbtpXda86";
 
+const newsletterItems = [
+  {
+    label: "February 2024",
+    href: "/HQFINALfinalfinal_compressed.pdf",
+  },
+  {
+    label: "September 2024",
+    href: "/September_Newsletter.pdf",
+  },
+  {
+    label: "May 2025",
+    href: "/Netflix Newsletter Final.pdf",
+  },
+];
+
+const navigationItems = [
+  { label: "Home", to: "/" },
+  { label: "Team", to: "/team" },
+  { label: "Yearbook", to: "/yearbook" },
+  { label: "Gallery", to: "/gallery" },
+  { label: "Contact", to: "/contact" },
+];
+
 export default function Navbar() {
+  const location = useLocation();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Separate dropdown states (important)
   const [desktopNewsletterOpen, setDesktopNewsletterOpen] = useState(false);
   const [mobileNewsletterOpen, setMobileNewsletterOpen] = useState(false);
 
@@ -19,11 +42,17 @@ export default function Navbar() {
       setScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  // Close desktop dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -35,109 +64,203 @@ export default function Navbar() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  // Close mobile dropdown when menu closes
   useEffect(() => {
-    if (!mobileMenuOpen) setMobileNewsletterOpen(false);
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        setDesktopNewsletterOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
   }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setMobileNewsletterOpen(false);
+    setDesktopNewsletterOpen(false);
+  }, [location.pathname]);
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+    setMobileNewsletterOpen(false);
+  };
+
+  const desktopLinkClass = (path: string) => {
+    const active = location.pathname === path;
+
+    return `
+      relative py-2
+      font-sans text-[0.78rem] font-medium
+      uppercase tracking-[0.12em]
+      transition-colors duration-300
+      ${
+        active
+          ? "text-[#F5F7FA]"
+          : "text-[#A4AFBC] hover:text-[#F5F7FA]"
+      }
+      after:absolute after:bottom-0 after:left-0
+      after:h-px after:bg-[#147BFF]
+      after:transition-all after:duration-300
+      ${active ? "after:w-full" : "after:w-0 hover:after:w-full"}
+    `;
+  };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-black/80 backdrop-blur-lg shadow-md py-3 border-b border-[#E3D5B3]/10"
-          : "py-5 bg-black/50 backdrop-blur-sm border-b border-transparent"
-      }`}
+      className={`
+        fixed inset-x-0 top-0 z-50
+        border-b transition-all duration-300
+        ${
+          scrolled || mobileMenuOpen
+            ? "border-[#147BFF]/20 bg-[#020304]/90 shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+            : "border-white/[0.04] bg-[#020304]/75 backdrop-blur-md"
+        }
+      `}
     >
-      <div className="container mx-auto px-4">
-        {/* NAVBAR ROW */}
-        <div className="flex items-center justify-between">
-          {/* Logo */}
+      <div className="mx-auto max-w-[96rem] px-5 sm:px-8 lg:px-12">
+        <div
+          className={`
+            relative z-50 flex items-center justify-between
+            transition-all duration-300
+            ${scrolled ? "h-[4.5rem]" : "h-[5.5rem]"}
+          `}
+        >
+          {/* Logo and identity */}
           <Link
             to="/"
-            className="flex items-center"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={closeMobileMenu}
+            className="group flex items-center gap-4"
+            aria-label="MIT Editorial Board home"
           >
             <img
               src="/logo.png"
-              alt="MIT Editorial Board"
-              className="h-12 w-auto object-contain transition-transform duration-300 hover:scale-105"
+              alt=""
+              className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04] sm:h-11"
             />
+
+            <div className="hidden items-center gap-3 sm:flex">
+              <span className="h-5 w-px bg-[#147BFF]/55" />
+
+              <span className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-[#F5F7FA]">
+                MIT Editorial Board
+              </span>
+            </div>
           </Link>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-[#E3D5B3] focus:outline-none"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className="link-hover text-[#E3D5B3] font-['Playfair_Display'] font-medium tracking-wide"
-            >
+          {/* Desktop navigation */}
+          <nav className="hidden items-center gap-7 lg:flex">
+            <Link to="/" className={desktopLinkClass("/")}>
               Home
             </Link>
 
-            <Link
-              to="/team"
-              className="link-hover text-[#E3D5B3] font-['Playfair_Display'] font-medium tracking-wide"
-            >
+            <Link to="/team" className={desktopLinkClass("/team")}>
               Team
             </Link>
 
-            {/* Desktop Newsletter Dropdown */}
+            {/* Desktop newsletter dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
-                className="flex items-center link-hover text-[#E3D5B3] font-['Playfair_Display'] font-medium tracking-wide"
-                onClick={() => setDesktopNewsletterOpen((prev) => !prev)}
+                type="button"
+                onClick={() => {
+                  setDesktopNewsletterOpen((current) => !current);
+                }}
+                className={`
+                  relative flex items-center gap-1 py-2
+                  font-sans text-[0.78rem] font-medium
+                  uppercase tracking-[0.12em]
+                  transition-colors duration-300
+                  ${
+                    desktopNewsletterOpen
+                      ? "text-[#F5F7FA]"
+                      : "text-[#A4AFBC] hover:text-[#F5F7FA]"
+                  }
+                  after:absolute after:bottom-0 after:left-0
+                  after:h-px after:bg-[#147BFF]
+                  after:transition-all after:duration-300
+                  ${
+                    desktopNewsletterOpen
+                      ? "after:w-full"
+                      : "after:w-0 hover:after:w-full"
+                  }
+                `}
+                aria-expanded={desktopNewsletterOpen}
+                aria-haspopup="menu"
               >
-                <span>Newsletters</span>
+                Newsletters
+
                 <ChevronDown
-                  className={`h-4 w-4 ml-1 transition-transform ${
-                    desktopNewsletterOpen ? "rotate-180" : ""
-                  }`}
+                  className={`
+                    h-3.5 w-3.5 transition-transform duration-300
+                    ${desktopNewsletterOpen ? "rotate-180" : ""}
+                  `}
                 />
               </button>
 
               {desktopNewsletterOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 rounded-xl shadow-xl bg-black/90 backdrop-blur-md border border-[#E3D5B3]/20 animate-fade-in overflow-hidden">
+                <div
+                  className="
+                    absolute left-1/2 top-[calc(100%+0.9rem)]
+                    w-60 -translate-x-1/2 overflow-hidden
+                    border border-[#147BFF]/25
+                    bg-[#05080D]/95
+                    shadow-[0_24px_70px_rgba(0,0,0,0.65)]
+                    backdrop-blur-xl
+                  "
+                  role="menu"
+                >
+                  <div className="border-b border-white/[0.06] px-4 py-3">
+                    <span className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[#35C8FF]">
+                      Latest editions
+                    </span>
+                  </div>
+
                   <div className="py-2">
-                    <a
-                      href="/HQFINALfinalfinal_compressed.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block px-4 py-3 font-['Playfair_Display'] text-[#C2B59B] hover:bg-[#E3D5B3]/10 hover:text-[#E3D5B3] transition"
-                    >
-                      February 2024
-                    </a>
+                    {newsletterItems.map((item, index) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setDesktopNewsletterOpen(false)}
+                        className="
+                          group flex items-center justify-between
+                          px-4 py-3
+                          font-sans text-sm text-[#A4AFBC]
+                          transition-colors duration-200
+                          hover:bg-[#147BFF]/10 hover:text-[#F5F7FA]
+                        "
+                        role="menuitem"
+                      >
+                        <span>{item.label}</span>
 
-                    <a
-                      href="/September_Newsletter.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block px-4 py-3 font-['Playfair_Display'] text-[#C2B59B] hover:bg-[#E3D5B3]/10 hover:text-[#E3D5B3] transition"
-                    >
-                      September 2024
-                    </a>
-
-                    <a
-                      href="/Netflix Newsletter Final.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block px-4 py-3 font-['Playfair_Display'] text-[#C2B59B] hover:bg-[#E3D5B3]/10 hover:text-[#E3D5B3] transition"
-                    >
-                      May 2025
-                    </a>
+                        <span className="font-mono text-[0.65rem] text-[#147BFF]/65 transition-colors group-hover:text-[#35C8FF]">
+                          0{index + 1}
+                        </span>
+                      </a>
+                    ))}
                   </div>
                 </div>
               )}
@@ -145,185 +268,244 @@ export default function Navbar() {
 
             <Link
               to="/yearbook"
-              className="link-hover text-[#E3D5B3] font-['Playfair_Display'] font-medium tracking-wide"
+              className={desktopLinkClass("/yearbook")}
             >
               Yearbook
             </Link>
 
-            <Link
-              to="/gallery"
-              className="link-hover text-[#E3D5B3] font-['Playfair_Display'] font-medium tracking-wide"
-            >
+            <Link to="/gallery" className={desktopLinkClass("/gallery")}>
               Gallery
             </Link>
 
-            <Link
-              to="/contact"
-              className="link-hover text-[#E3D5B3] font-['Playfair_Display'] font-medium tracking-wide"
-            >
+            <Link to="/contact" className={desktopLinkClass("/contact")}>
               Contact
             </Link>
 
-            {/* Apply Button */}
             <a
               href={APPLY_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="
-                border-2 border-[#E3D5B3]/45
-                bg-black/25
-                text-[#E3D5B3]
-                font-['Playfair_Display']
-                px-5 py-2 rounded-md
-                shadow-[0_10px_30px_rgba(0,0,0,0.45)]
-                hover:border-[#E3D5B3]/80 hover:bg-black/35
-                transition-all
+                ml-1 flex h-10 items-center justify-center
+                border border-[#147BFF]/80
+                bg-[#147BFF]/10 px-5
+                font-sans text-[0.72rem] font-semibold
+                uppercase tracking-[0.14em] text-[#F5F7FA]
+                transition duration-300
+                hover:-translate-y-0.5 hover:bg-[#147BFF]
+                hover:shadow-[0_0_28px_rgba(20,123,255,0.3)]
+                focus:outline-none focus:ring-2 focus:ring-[#35C8FF]
               "
             >
               Apply
             </a>
           </nav>
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen((current) => !current);
+            }}
+            className="
+              relative flex h-11 w-11 items-center justify-center
+              text-[#F5F7FA] transition
+              hover:text-[#35C8FF]
+              focus:outline-none focus:ring-2 focus:ring-[#147BFF]
+              lg:hidden
+            "
+            aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-7 w-7" strokeWidth={1.5} />
+            ) : (
+              <Menu className="h-8 w-8" strokeWidth={1.5} />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* MOBILE MENU */}
+      {/* Mobile navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-md">
-          <div className="pt-24 min-h-[100dvh] flex items-center justify-center px-4">
-            <div className="relative w-full max-w-sm rounded-2xl bg-black/85 border border-[#E3D5B3]/20 shadow-xl px-6 py-8">
-              {/* Close button */}
-              <button
-                className="absolute top-4 right-4 p-2 text-[#E3D5B3]/80 hover:text-[#E3D5B3]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <X className="h-6 w-6" />
-              </button>
+        <div className="fixed left-0 top-0 z-40 h-[100dvh] w-screen overflow-y-auto bg-[#020304] lg:hidden">
+          <div
+            className="fixed left-0 top-0 h-[100dvh] w-screen bg-[#020304]"
+            onClick={closeMobileMenu}
+            aria-hidden="true"
+          />
 
-              <div className="mt-4 flex flex-col items-stretch gap-4">
+          <nav
+            className="
+              relative z-10 mx-auto flex min-h-[100dvh]
+              max-w-lg flex-col px-7 pb-10 pt-[7.5rem]
+            "
+            aria-label="Mobile navigation"
+          >
+            <div className="mb-5 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#147BFF]" />
+
+              <span className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-[#35C8FF]">
+                Navigation
+              </span>
+            </div>
+
+            <div className="flex flex-col border-t border-white/[0.08]">
+              {navigationItems.slice(0, 2).map((item, index) => (
                 <Link
-                  to="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center font-['Playfair_Display'] text-[#E3D5B3] text-lg py-2 rounded-lg hover:bg-[#E3D5B3]/10 transition"
-                >
-                  Home
-                </Link>
-
-                <Link
-                  to="/team"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center font-['Playfair_Display'] text-[#E3D5B3] text-lg py-2 rounded-lg hover:bg-[#E3D5B3]/10 transition"
-                >
-                  Team
-                </Link>
-
-                {/* Mobile Newsletter Dropdown */}
-                <div className="w-full">
-                  <button
-                    onClick={() => setMobileNewsletterOpen((prev) => !prev)}
-                    className="w-full flex items-center justify-center gap-2 font-['Playfair_Display'] text-[#E3D5B3] text-lg py-2 rounded-lg hover:bg-[#E3D5B3]/10 transition"
-                  >
-                    Newsletters
-                    <ChevronDown
-                      className={`h-5 w-5 transition-transform ${
-                        mobileNewsletterOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {mobileNewsletterOpen && (
-                    <div className="mt-2 rounded-xl border border-[#E3D5B3]/15 bg-black/60 overflow-hidden">
-                      <a
-                        href="/HQFINALfinalfinal_compressed.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTimeout(() => setMobileMenuOpen(false), 0);
-                        }}
-                        className="block px-4 py-3 text-center font-['Playfair_Display'] text-[#C2B59B] hover:bg-[#E3D5B3]/10 hover:text-[#E3D5B3] transition"
-                      >
-                        February 2024
-                      </a>
-
-                      <a
-                        href="/September_Newsletter.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTimeout(() => setMobileMenuOpen(false), 0);
-                        }}
-                        className="block px-4 py-3 text-center font-['Playfair_Display'] text-[#C2B59B] hover:bg-[#E3D5B3]/10 hover:text-[#E3D5B3] transition"
-                      >
-                        September 2024
-                      </a>
-
-                      <a
-                        href="/Netflix Newsletter Final.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTimeout(() => setMobileMenuOpen(false), 0);
-                        }}
-                        className="block px-4 py-3 text-center font-['Playfair_Display'] text-[#C2B59B] hover:bg-[#E3D5B3]/10 hover:text-[#E3D5B3] transition"
-                      >
-                        May 2025
-                      </a>
-                    </div>
-                  )}
-                </div>
-
-                <Link
-                  to="/yearbook"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center font-['Playfair_Display'] text-[#E3D5B3] text-lg py-2 rounded-lg hover:bg-[#E3D5B3]/10 transition"
-                >
-                  Yearbook
-                </Link>
-
-                <Link
-                  to="/gallery"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center font-['Playfair_Display'] text-[#E3D5B3] text-lg py-2 rounded-lg hover:bg-[#E3D5B3]/10 transition"
-                >
-                  Gallery
-                </Link>
-
-                <Link
-                  to="/contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center font-['Playfair_Display'] text-[#E3D5B3] text-lg py-2 rounded-lg hover:bg-[#E3D5B3]/10 transition"
-                >
-                  Contact
-                </Link>
-
-                {/* Apply button */}
-                <a
-                  href={APPLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setTimeout(() => setMobileMenuOpen(false), 0);
-                  }}
+                  key={item.to}
+                  to={item.to}
+                  onClick={closeMobileMenu}
                   className="
-                    mt-2 w-full text-center
-                    px-6 py-3 rounded-lg
-                    border-2 border-[#E3D5B3]/45
-                    bg-black/25
-                    text-[#E3D5B3]
-                    font-['Playfair_Display'] font-semibold
-                    shadow-[0_10px_30px_rgba(0,0,0,0.45)]
-                    hover:border-[#E3D5B3]/80 hover:bg-black/35
-                    transition
+                    group flex items-center justify-between
+                    border-b border-white/[0.08] py-4
                   "
                 >
-                  Apply
-                </a>
+                  <span
+                    className={`
+                      font-display text-[2.5rem] uppercase
+                      leading-none tracking-[0.015em]
+                      transition-colors
+                      ${
+                        location.pathname === item.to
+                          ? "text-[#35C8FF]"
+                          : "text-[#F5F7FA] group-hover:text-[#35C8FF]"
+                      }
+                    `}
+                  >
+                    {item.label}
+                  </span>
+
+                  <span className="font-mono text-[0.65rem] text-[#147BFF]/70">
+                    0{index + 1}
+                  </span>
+                </Link>
+              ))}
+
+              {/* Mobile newsletter dropdown */}
+              <div className="border-b border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileNewsletterOpen((current) => !current);
+                  }}
+                  className="
+                    group flex w-full items-center justify-between py-4
+                    text-left
+                  "
+                  aria-expanded={mobileNewsletterOpen}
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="font-display text-[2.5rem] uppercase leading-none tracking-[0.015em] text-[#F5F7FA] transition-colors group-hover:text-[#35C8FF]">
+                      Newsletters
+                    </span>
+
+                    <ChevronDown
+                      className={`
+                        h-5 w-5 text-[#147BFF]
+                        transition-transform duration-300
+                        ${mobileNewsletterOpen ? "rotate-180" : ""}
+                      `}
+                    />
+                  </span>
+
+                  <span className="font-mono text-[0.65rem] text-[#147BFF]/70">
+                    03
+                  </span>
+                </button>
+
+                <div
+                  className={`
+                    grid transition-all duration-300
+                    ${
+                      mobileNewsletterOpen
+                        ? "grid-rows-[1fr] opacity-100"
+                        : "grid-rows-[0fr] opacity-0"
+                    }
+                  `}
+                >
+                  <div className="overflow-hidden">
+                    <div className="mb-4 border-l border-[#147BFF]/50 pl-5">
+                      {newsletterItems.map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={closeMobileMenu}
+                          className="
+                            block py-2 font-sans text-sm
+                            uppercase tracking-[0.12em]
+                            text-[#A4AFBC] transition
+                            hover:text-[#35C8FF]
+                          "
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {navigationItems.slice(2).map((item, index) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={closeMobileMenu}
+                  className="
+                    group flex items-center justify-between
+                    border-b border-white/[0.08] py-4
+                  "
+                >
+                  <span
+                    className={`
+                      font-display text-[2.5rem] uppercase
+                      leading-none tracking-[0.015em]
+                      transition-colors
+                      ${
+                        location.pathname === item.to
+                          ? "text-[#35C8FF]"
+                          : "text-[#F5F7FA] group-hover:text-[#35C8FF]"
+                      }
+                    `}
+                  >
+                    {item.label}
+                  </span>
+
+                  <span className="font-mono text-[0.65rem] text-[#147BFF]/70">
+                    0{index + 4}
+                  </span>
+                </Link>
+              ))}
             </div>
-          </div>
+
+            <a
+              href={APPLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMobileMenu}
+              className="
+                mt-6 flex h-12 w-full items-center justify-center
+                border border-[#147BFF]
+                bg-[#147BFF]/10
+                font-sans text-xs font-semibold uppercase
+                tracking-[0.18em] text-[#F5F7FA]
+                transition
+                hover:bg-[#147BFF]
+              "
+            >
+              Apply
+            </a>
+
+            <div className="mt-auto flex items-end justify-between pt-8">
+              <span className="font-sans text-[0.58rem] uppercase tracking-[0.3em] text-[#A4AFBC]/55">
+                Ideas in motion
+              </span>
+
+              <span className="h-10 w-px bg-gradient-to-b from-[#35C8FF] to-transparent" />
+            </div>
+          </nav>
         </div>
       )}
     </header>
