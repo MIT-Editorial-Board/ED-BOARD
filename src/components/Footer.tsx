@@ -1,185 +1,259 @@
+import { Link } from "react-router-dom";
+import {
+  ArrowUpRight,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+} from "lucide-react";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black text-[#C2B59B] py-14 relative overflow-hidden">
-      {/* vignette */}
-      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_240px_rgba(0,0,0,0.95)]" />
+    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-[#020304] text-[#F5F7FA]">
+      {/* Background grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(53,200,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(53,200,255,0.07) 1px, transparent 1px)",
+          backgroundSize: "74px 74px",
+          maskImage:
+            "linear-gradient(to bottom, black, transparent 90%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black, transparent 90%)",
+        }}
+        aria-hidden="true"
+      />
 
-      <div className="container mx-auto px-6 relative">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          {/* Logo + description */}
-          <div className="md:col-span-2">
-            <div className="flex items-center mb-4">
+      {/* Background glow */}
+      <div
+        className="pointer-events-none absolute -left-60 top-0 h-[34rem] w-[34rem] rounded-full opacity-20 blur-[160px]"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(20,123,255,0.28), transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto max-w-[96rem] px-5 pb-8 pt-16 sm:px-8 sm:pb-10 sm:pt-20 lg:px-12 lg:pt-24">
+        {/* Top metadata */}
+        <div className="mb-12 flex items-center justify-between border-b border-white/[0.08] pb-4">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-[#147BFF]" />
+
+            <span className="font-sans text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-[#35C8FF] sm:text-[0.68rem]">
+              MIT Editorial Board
+            </span>
+          </div>
+
+          <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-[#A4AFBC]/55 sm:text-[0.65rem]">
+            Manipal / India
+          </span>
+        </div>
+
+        {/* Main footer content */}
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.6fr_0.7fr_0.9fr] lg:gap-16">
+          {/* Logo and description */}
+          <div>
+            <Link
+              to="/"
+              className="group inline-flex items-center gap-4"
+              aria-label="MIT Editorial Board home"
+            >
               <img
                 src="/logo.png"
-                alt="MIT Editorial Board"
-                className="h-14 w-auto mr-3"
+                alt=""
+                className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04] sm:h-14"
               />
-            </div>
 
-            <p className="font-['Playfair_Display'] text-[#C2B59B] mb-6 max-w-md leading-relaxed">
+              <span className="h-8 w-px bg-[#147BFF]/55" />
+
+              <span className="font-display text-3xl uppercase leading-none tracking-[0.02em] text-[#F5F7FA] sm:text-4xl">
+                MIT Editorial Board
+              </span>
+            </Link>
+
+            <p className="mt-7 max-w-xl font-sans text-sm leading-7 text-[#A4AFBC] sm:text-base sm:leading-8">
               The MIT Editorial Board is the creative hub behind Manipal
               Institute of Technology&apos;s yearbook and student publications.
               We capture memories and shape narratives that last a lifetime.
             </p>
 
-            <div className="flex space-x-4">
+            {/* Social links */}
+            <div className="mt-8 flex gap-3">
               <a
                 href="https://www.instagram.com/mit.edboard?igsh=bmxmaGk0cWJ2ankz"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center transition hover:border-[#E3D5B3]/70 hover:bg-black/60 text-[#E3D5B3]"
+                className="group flex h-11 w-11 items-center justify-center border border-white/[0.12] bg-[#070A0F] text-[#A4AFBC] transition duration-300 hover:border-[#35C8FF] hover:bg-[#147BFF] hover:text-white"
+                aria-label="MIT Editorial Board on Instagram"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <path d="M17.5 6.5L17.5 6.5" />
-                </svg>
+                <Instagram
+                  size={18}
+                  strokeWidth={1.5}
+                  className="transition-transform duration-300 group-hover:scale-110"
+                />
               </a>
 
               <a
                 href="https://www.linkedin.com/company/the-mit-editorial-board/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center transition hover:border-[#E3D5B3]/70 hover:bg-black/60 text-[#E3D5B3]"
+                className="group flex h-11 w-11 items-center justify-center border border-white/[0.12] bg-[#070A0F] text-[#A4AFBC] transition duration-300 hover:border-[#35C8FF] hover:bg-[#147BFF] hover:text-white"
+                aria-label="MIT Editorial Board on LinkedIn"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
+                <Linkedin
+                  size={18}
+                  strokeWidth={1.5}
+                  className="transition-transform duration-300 group-hover:scale-110"
+                />
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick links */}
           <div>
-            <h3 className="font-['Cinzel'] text-[#E3D5B3] uppercase tracking-wide text-lg mb-4">
-              Quick Links
-            </h3>
-            <ul className="space-y-3 font-['Playfair_Display']">
-              <li>
-                <a
-                  href="#about"
-                  className="text-[#C2B59B] hover:text-[#E3D5B3] transition"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#team"
-                  className="text-[#C2B59B] hover:text-[#E3D5B3] transition"
-                >
-                  Our Team
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#gallery"
-                  className="text-[#C2B59B] hover:text-[#E3D5B3] transition"
-                >
-                  Gallery
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#domains"
-                  className="text-[#C2B59B] hover:text-[#E3D5B3] transition"
-                >
-                  Domains
-                </a>
-              </li>
-            </ul>
+            <div className="mb-6 flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <h3 className="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-[#35C8FF]">
+                Quick Links
+              </h3>
+
+              <span className="font-mono text-[0.58rem] text-[#147BFF]/70">
+                01
+              </span>
+            </div>
+
+            <nav className="flex flex-col">
+              <a
+                href="#about"
+                className="group flex items-center justify-between border-b border-white/[0.07] py-3 font-sans text-sm text-[#A4AFBC] transition hover:text-[#F5F7FA]"
+              >
+                About Us
+
+                <ArrowUpRight
+                  size={14}
+                  strokeWidth={1.5}
+                  className="text-[#147BFF] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </a>
+
+              <Link
+                to="/team"
+                className="group flex items-center justify-between border-b border-white/[0.07] py-3 font-sans text-sm text-[#A4AFBC] transition hover:text-[#F5F7FA]"
+              >
+                Our Team
+
+                <ArrowUpRight
+                  size={14}
+                  strokeWidth={1.5}
+                  className="text-[#147BFF] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </Link>
+
+              <a
+                href="#gallery"
+                className="group flex items-center justify-between border-b border-white/[0.07] py-3 font-sans text-sm text-[#A4AFBC] transition hover:text-[#F5F7FA]"
+              >
+                Gallery
+
+                <ArrowUpRight
+                  size={14}
+                  strokeWidth={1.5}
+                  className="text-[#147BFF] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </a>
+
+              <a
+                href="#domains"
+                className="group flex items-center justify-between border-b border-white/[0.07] py-3 font-sans text-sm text-[#A4AFBC] transition hover:text-[#F5F7FA]"
+              >
+                Domains
+
+                <ArrowUpRight
+                  size={14}
+                  strokeWidth={1.5}
+                  className="text-[#147BFF] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </a>
+            </nav>
           </div>
 
-          {/* Contact */}
+          {/* Contact details */}
           <div>
-            <h3 className="font-['Cinzel'] text-[#E3D5B3] uppercase tracking-wide text-lg mb-4">
-              Contact
-            </h3>
-            <ul className="space-y-3 font-['Playfair_Display']">
-              <li className="flex items-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-3 mt-0.5 text-[#E3D5B3]"
-                >
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                <span className="text-[#C2B59B]">
-                  MIT Manipal, Karnataka, India - 576104
-                </span>
-              </li>
+            <div className="mb-6 flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <h3 className="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-[#35C8FF]">
+                Contact
+              </h3>
 
-              <li className="flex items-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-3 mt-0.5 text-[#E3D5B3]"
-                >
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-                <span className="text-[#C2B59B]">mitedboard@gmail.com</span>
-              </li>
-            </ul>
+              <span className="font-mono text-[0.58rem] text-[#147BFF]/70">
+                02
+              </span>
+            </div>
+
+            <div className="space-y-5">
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 flex-none items-center justify-center border border-[#147BFF]/25 bg-[#147BFF]/[0.05] text-[#35C8FF]">
+                  <MapPin size={17} strokeWidth={1.5} />
+                </div>
+
+                <p className="pt-1 font-sans text-sm leading-6 text-[#A4AFBC]">
+                  MIT Manipal, Karnataka, India - 576104
+                </p>
+              </div>
+
+              <a
+                href="mailto:mitedboard@gmail.com"
+                className="group flex items-start gap-4"
+              >
+                <div className="flex h-10 w-10 flex-none items-center justify-center border border-[#147BFF]/25 bg-[#147BFF]/[0.05] text-[#35C8FF] transition group-hover:border-[#35C8FF] group-hover:bg-[#147BFF]/15">
+                  <Mail size={17} strokeWidth={1.5} />
+                </div>
+
+                <span className="pt-2 font-sans text-sm text-[#A4AFBC] transition group-hover:text-[#F5F7FA]">
+                  mitedboard@gmail.com
+                </span>
+              </a>
+            </div>
           </div>
         </div>
 
+        {/* Large editorial wordmark */}
+        <div className="mt-16 overflow-hidden border-y border-white/[0.08] py-6 sm:mt-20">
+          <p
+            className="whitespace-nowrap font-display text-[clamp(3.6rem,10vw,8rem)] uppercase leading-none tracking-[0.01em]"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, rgba(245,247,250,0.2), rgba(77,124,243,0.75), rgba(245,247,250,0.2))",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            Ideas in motion. Stories in focus.
+          </p>
+        </div>
+
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[#E3D5B3]/20 flex flex-col md:flex-row justify-between items-center">
-          <p className="font-['Playfair_Display'] text-[#C2B59B]/70 text-sm">
+        <div className="flex flex-col gap-4 pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-sans text-xs text-[#A4AFBC]/65">
             &copy; {currentYear} MIT Editorial Board. All rights reserved.
           </p>
 
-          <div className="mt-4 md:mt-0 font-['Playfair_Display']">
+          <div className="flex items-center gap-3 font-sans text-xs text-[#A4AFBC]/65">
             <a
               href="#"
-              className="text-[#C2B59B]/70 text-sm hover:text-[#E3D5B3] transition"
+              className="transition hover:text-[#35C8FF]"
             >
               Privacy Policy
             </a>
-            <span className="mx-2 text-[#C2B59B]/50">•</span>
+
+            <span className="h-1 w-1 rounded-full bg-[#147BFF]" />
+
             <a
               href="#"
-              className="text-[#C2B59B]/70 text-sm hover:text-[#E3D5B3] transition"
+              className="transition hover:text-[#35C8FF]"
             >
               Terms of Service
             </a>

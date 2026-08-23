@@ -1,31 +1,66 @@
+import { lazy, Suspense } from "react";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from "react-router-dom";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/context/ThemeContext";
 import ScrollToTop from "@/components/ScrollToTop";
-import Index from "./pages/Index";
-import Team from "./pages/Team";
-import Gallery from "./pages/Gallery";
-import NotFound from "./pages/NotFound";
-import ContactUs from "./pages/ContactUs";
-import Yearbook from "./pages/Yearbook";
 
-// Import LOGO for favicon
+import Index from "./pages/Index";
+
+const Team = lazy(() => import("./pages/Team"));
+const Gallery = lazy(() => import("./pages/Gallery"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+const Yearbook = lazy(() => import("./pages/Yearbook"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
 const faviconUrl = "/logo.png";
 
-// Update favicon
 const setFavicon = () => {
-  const link = document.querySelector("link[rel*='icon']") || document.createElement("link");
-  link.setAttribute("rel", "shortcut icon");
-  link.setAttribute("href", faviconUrl);
-  document.getElementsByTagName("head")[0].appendChild(link);
+  const existingLink =
+    document.querySelector<HTMLLinkElement>(
+      "link[rel*='icon']"
+    );
+
+  const favicon =
+    existingLink ?? document.createElement("link");
+
+  favicon.rel = "shortcut icon";
+  favicon.href = faviconUrl;
+
+  if (!existingLink) {
+    document.head.appendChild(favicon);
+  }
 };
 
 setFavicon();
 
 const queryClient = new QueryClient();
+
+const PageLoader = () => (
+  <div className="flex min-h-screen items-center justify-center bg-[#030507] text-[#F5F7FA]">
+    <div className="flex flex-col items-center gap-5">
+      <div className="relative h-12 w-12">
+        <span className="absolute inset-0 rounded-full border border-[#147BFF]/30" />
+
+        <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-[#35C8FF]" />
+      </div>
+
+      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#A4AFBC]">
+        Loading
+      </span>
+    </div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -33,17 +68,20 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+
         <BrowserRouter>
           <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/yearbook" element={<Yearbook />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/yearbook" element={<Yearbook />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>

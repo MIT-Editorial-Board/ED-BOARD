@@ -1,101 +1,144 @@
-import React, { useEffect } from "react";
+import { ArrowUpRight, Mail } from "lucide-react";
+import { FaInstagram, FaLinkedin } from "react-icons/fa";
+import { motion } from "framer-motion";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { FaInstagram, FaLinkedin } from "react-icons/fa";
 
-const ContactUs: React.FC = () => {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    const elements = document.querySelectorAll(".appear-on-scroll");
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
-
+const ContactUs = () => {
   return (
-    <>
+    <div className="min-h-screen overflow-hidden bg-[#030507] text-[#F5F7FA]">
       <Navbar />
 
-      <div className="pt-28 pb-20 bg-black text-[#C2B59B] relative overflow-hidden">
-        {/* vignette */}
-        <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_240px_rgba(0,0,0,0.95)]" />
+      <main className="relative pt-28">
+        <div
+          className="pointer-events-none fixed inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(53,200,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(53,200,255,0.07) 1px, transparent 1px)",
+            backgroundSize: "74px 74px",
+            maskImage: "linear-gradient(to bottom, black, transparent 85%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black, transparent 85%)",
+          }}
+        />
 
-        <div className="container mx-auto px-6 relative">
-          <section className="text-center py-10 appear-on-scroll">
-            <h1 className="font-['Cinzel'] text-[#E3D5B3] uppercase tracking-[0.10em] text-4xl md:text-5xl mb-4">
-              Connect With Us
-            </h1>
-            <p className="font-['Playfair_Display'] text-[#C2B59B] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-              Your thoughts matter to us. Got a question, feedback, or want to
-              collaborate? Reach out anytime.
-            </p>
-            <div className="mx-auto mt-6 h-[2px] w-28 bg-[#E3D5B3]/30 rounded-full" />
-          </section>
+        <div className="pointer-events-none absolute right-[-180px] top-[-40px] h-[550px] w-[550px] rounded-full bg-[#147BFF]/12 blur-[170px]" />
 
-          <section className="max-w-xl mx-auto appear-on-scroll">
-            <div className="rounded-xl border border-[#E3D5B3]/20 bg-black/40 backdrop-blur-sm p-8 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
-              <div className="space-y-4 font-['Playfair_Display'] text-[#C2B59B] text-lg">
+        <section className="relative mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8 lg:px-10 lg:pb-32 lg:pt-20">
+          <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="mb-6 flex items-center gap-3">
+                <span className="h-px w-12 bg-[#35C8FF]" />
+                <span className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#35C8FF] sm:text-xs">
+                  Contact
+                </span>
+              </div>
+
+              <h1 className="font-display text-[clamp(4.5rem,12vw,10rem)] uppercase leading-[0.8] tracking-[-0.025em] text-[#F5F7FA]">
+                Connect
+                <br />
+                With Us
+              </h1>
+
+              <p className="mt-8 max-w-xl font-sans text-base leading-7 text-[#A4AFBC] sm:text-lg">
+                Your thoughts matter to us. Got a question, feedback, or want to
+                collaborate? Reach out anytime.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="relative border border-white/10 bg-[#070A0F]/85 p-6 backdrop-blur-md sm:p-8"
+            >
+              <span className="absolute left-0 top-0 h-10 w-10 border-l border-t border-[#35C8FF]" />
+              <span className="absolute bottom-0 right-0 h-10 w-10 border-b border-r border-[#35C8FF]" />
+
+              <div className="space-y-2 font-display text-3xl uppercase leading-tight text-[#F5F7FA] sm:text-4xl">
                 <p>We’d love to hear from you.</p>
                 <p>Got a question?</p>
                 <p>Want to share feedback?</p>
               </div>
 
-              <div className="mt-8 space-y-6">
-                <p className="font-['Playfair_Display'] text-[#C2B59B]">
-                  Email:{" "}
-                  <a
-                    href="mailto:edboard2024@gmail.com"
-                    className="text-[#E3D5B3] hover:text-[#E3D5B3]/80 transition underline underline-offset-4"
-                  >
+              <a
+                href="mailto:edboard2024@gmail.com"
+                className="group mt-9 flex items-center justify-between gap-4 border-t border-white/10 py-5 text-[#F5F7FA] transition hover:text-[#35C8FF]"
+              >
+                <span className="flex min-w-0 items-center gap-3">
+                  <Mail className="h-5 w-5 shrink-0 text-[#35C8FF]" />
+
+                  <span className="truncate font-sans text-sm sm:text-base">
                     edboard2024@gmail.com
-                  </a>
+                  </span>
+                </span>
+
+                <ArrowUpRight className="h-5 w-5 shrink-0 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+              </a>
+
+              <div className="border-t border-white/10 pt-6">
+                <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-[#A4AFBC] sm:text-xs">
+                  Follow us
                 </p>
 
-                <div className="pt-6 border-t border-[#E3D5B3]/15">
-                  <p className="font-['Cinzel'] text-[#E3D5B3] uppercase tracking-wide mb-4">
-                    Follow us
-                  </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <a
+                    href="https://www.instagram.com/mit.edboard?igsh=MTU5dG9haWFiZ2hhOA=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between border border-white/15 bg-[#030507] px-4 py-4 text-[#F5F7FA] transition hover:border-[#35C8FF] hover:text-[#35C8FF]"
+                    aria-label="Visit MIT Editorial Board on Instagram"
+                  >
+                    <span className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] sm:text-xs">
+                      <FaInstagram className="h-5 w-5" />
+                      Instagram
+                    </span>
 
-                  <div className="flex items-center gap-5">
-                    <a
-                      href="https://www.instagram.com/mit.edboard?igsh=MTU5dG9haWFiZ2hhOA=="
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-12 h-12 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center text-[#E3D5B3] hover:border-[#E3D5B3]/70 hover:bg-black/60 transition"
-                      aria-label="Instagram"
-                    >
-                      <FaInstagram size={20} />
-                    </a>
+                    <ArrowUpRight className="hidden h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 sm:block" />
+                  </a>
 
-                    <a
-                      href="https://www.linkedin.com/company/the-mit-editorial-board"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-12 h-12 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center text-[#E3D5B3] hover:border-[#E3D5B3]/70 hover:bg-black/60 transition"
-                      aria-label="LinkedIn"
-                    >
-                      <FaLinkedin size={20} />
-                    </a>
-                  </div>
+                  <a
+                    href="https://www.linkedin.com/company/the-mit-editorial-board"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between border border-white/15 bg-[#030507] px-4 py-4 text-[#F5F7FA] transition hover:border-[#35C8FF] hover:text-[#35C8FF]"
+                    aria-label="Visit MIT Editorial Board on LinkedIn"
+                  >
+                    <span className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] sm:text-xs">
+                      <FaLinkedin className="h-5 w-5" />
+                      LinkedIn
+                    </span>
+
+                    <ArrowUpRight className="hidden h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 sm:block" />
+                  </a>
                 </div>
               </div>
-            </div>
-          </section>
-        </div>
-      </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="relative border-t border-white/10">
+          <div className="mx-auto flex max-w-7xl items-center gap-5 overflow-hidden px-5 py-8 sm:px-8 lg:px-10">
+            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.3em] text-[#35C8FF] sm:text-xs">
+              Ideas in motion
+            </span>
+
+            <span className="h-px min-w-16 flex-1 bg-gradient-to-r from-[#35C8FF] to-transparent" />
+
+            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.3em] text-[#A4AFBC] sm:text-xs">
+              Stories in focus
+            </span>
+          </div>
+        </section>
+      </main>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

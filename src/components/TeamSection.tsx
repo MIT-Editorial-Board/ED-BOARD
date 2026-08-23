@@ -1,99 +1,209 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { teamMembers } from "@/data/teamData";
+import { ArrowUpRight } from "lucide-react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 export default function TeamSection() {
-  // Only show executive board members in the preview
-  const executiveMembers = teamMembers.filter(
-    (member) => member.department === "Executive Board"
-  );
-  const previewMembers = executiveMembers.slice(0, 2);
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  const isInView = useInView(sectionRef, {
+    once: true,
+    margin: "-10% 0px",
+  });
+
+  const visible = reduceMotion || isInView;
 
   return (
     <section
-      id="team"
-      className="py-20 bg-black text-[#C2B59B] relative overflow-hidden"
+      ref={sectionRef}
+      className="relative overflow-hidden border-t border-white/[0.06] bg-[#030507] py-20 text-[#F5F7FA] sm:py-28 lg:py-36"
     >
-      {/* subtle vignette */}
-      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_220px_rgba(0,0,0,0.9)]" />
+      {/* Background grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.1]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(53,200,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(53,200,255,0.08) 1px, transparent 1px)",
+          backgroundSize: "74px 74px",
+          maskImage:
+            "linear-gradient(to bottom, transparent, black 25%, black 75%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent, black 25%, black 75%, transparent)",
+        }}
+        aria-hidden="true"
+      />
 
-      <div className="container mx-auto px-6 relative">
-        <h2 className="text-center mb-6 appear-on-scroll">
-          <span className="font-['Cinzel'] text-[#E3D5B3] uppercase tracking-[0.08em] text-3xl md:text-4xl">
-            Meet Our Team
+      {/* Blue glow */}
+      <div
+        className="pointer-events-none absolute -right-52 top-1/3 h-[36rem] w-[36rem] rounded-full opacity-20 blur-[160px]"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(20,123,255,0.3), transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto max-w-[96rem] px-5 sm:px-8 lg:px-12">
+        {/* Section metadata */}
+        <motion.div
+          className="mb-10 flex items-center justify-between border-b border-white/[0.08] pb-4 sm:mb-14"
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          animate={
+            visible
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: 18 }
+          }
+          transition={{ duration: 0.7 }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-[#147BFF]" />
+
+            <span className="font-sans text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-[#35C8FF] sm:text-[0.68rem]">
+              The Collective
+            </span>
+          </div>
+
+          <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-[#A4AFBC]/55 sm:text-[0.65rem]">
+            Section / 02
           </span>
-          <div className="mx-auto mt-4 h-[2px] w-28 bg-[#E3D5B3]/40 rounded-full" />
-        </h2>
+        </motion.div>
 
-        <p className="text-center font-['Playfair_Display'] text-[#C2B59B] max-w-2xl mx-auto mb-10 appear-on-scroll">
-          Our team consists of passionate individuals across various domains
-          working together to create memorable content and experiences.
-        </p>
+        {/* Heading */}
+        <motion.div
+          className="mb-12 grid items-end gap-7 lg:mb-20 lg:grid-cols-[1fr_0.55fr]"
+          initial={reduceMotion ? false : { opacity: 0, y: 35 }}
+          animate={
+            visible
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: 35 }
+          }
+          transition={{
+            duration: 0.85,
+            delay: reduceMotion ? 0 : 0.1,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          <h2 className="font-display text-[clamp(4.2rem,13vw,9rem)] font-normal uppercase leading-[0.8] tracking-[-0.015em] text-[#F5F7FA]">
+            Made by
+            <span className="block text-[#4D7CF3]">Many Voices</span>
+          </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {previewMembers.map((member, index) => (
-            <div
-              key={index}
-              className="
-                group relative
-                rounded-xl
-                border border-[#E3D5B3]/20
-                bg-black/40 backdrop-blur-sm
-                shadow-[0_12px_40px_rgba(0,0,0,0.45)]
-                overflow-hidden
-                transform transition-all duration-500 hover:-translate-y-2
-                appear-on-scroll
-              "
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="p-8 flex flex-col items-center text-center">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-full shadow-[inset_0_0_80px_rgba(0,0,0,0.55)]" />
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-56 h-56 rounded-full object-cover border border-[#E3D5B3]/25 transition-transform duration-700 group-hover:scale-105"
-                  />
+          <p className="max-w-lg font-sans text-sm leading-7 text-[#A4AFBC] sm:text-base sm:leading-8 lg:pb-2">
+            Writers, photographers, designers and editors working together to
+            document the people, ideas and moments that shape MIT Manipal.
+          </p>
+        </motion.div>
+
+        {/* Main team feature */}
+        <div className="grid gap-8 lg:grid-cols-[1.45fr_0.55fr] lg:gap-0">
+          {/* Team image */}
+          <motion.div
+            className="relative"
+            initial={reduceMotion ? false : { opacity: 0, x: -40 }}
+            animate={
+              visible
+                ? { opacity: 1, x: 0 }
+                : { opacity: 0, x: -40 }
+            }
+            transition={{
+              duration: 0.9,
+              delay: reduceMotion ? 0 : 0.2,
+            }}
+          >
+            <div className="group relative overflow-hidden border border-[#147BFF]/25 bg-[#05070A]">
+              <img
+                src="/Board26.jpeg"
+                alt="MIT Editorial Board team"
+                loading="lazy"
+                className="aspect-[16/10] w-full object-cover object-center brightness-[0.72] saturate-[0.8] transition duration-1000 group-hover:scale-[1.025] group-hover:brightness-[0.82]"
+              />
+
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030507] via-transparent to-black/25"
+                aria-hidden="true"
+              />
+
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(120deg, rgba(20,123,255,0.14), transparent 42%)",
+                }}
+                aria-hidden="true"
+              />
+
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-7">
+                <div>
+                  <span className="font-mono text-[0.55rem] uppercase tracking-[0.3em] text-[#35C8FF]">
+                    Editorial Board
+                  </span>
+
+                  <h3 className="mt-2 font-display text-[2.5rem] font-normal uppercase leading-none text-[#F5F7FA] sm:text-[4rem]">
+                    The Board
+                  </h3>
                 </div>
 
-                <h3 className="mt-6 font-['Cinzel'] text-[#E3D5B3] text-xl tracking-wide">
-                  {member.name}
-                </h3>
-                <p className="mt-1 font-['Playfair_Display'] text-[#C2B59B]">
-                  {member.position}
-                </p>
+                <span className="hidden font-mono text-[0.6rem] uppercase tracking-[0.25em] text-[#A4AFBC] sm:block">
+                  MIT Manipal
+                </span>
               </div>
-            </div>
-          ))}
 
-          {/* Teaser card */}
-          <div className="group relative rounded-xl overflow-hidden border border-[#E3D5B3]/25 bg-black/40 backdrop-blur-sm shadow-[0_12px_40px_rgba(0,0,0,0.45)] flex items-center justify-center appear-on-scroll">
-            <div className="text-center p-8">
-              <h3 className="font-['Cinzel'] text-[#E3D5B3] text-2xl mb-3 tracking-wide uppercase">
-                Meet the Full Team
-              </h3>
-              <p className="font-['Playfair_Display'] text-[#C2B59B] mb-6">
-                Discover all the talented individuals who make up the MIT
-                Editorial Board.
-              </p>
+              <span className="pointer-events-none absolute left-5 top-5 h-8 w-8 border-l border-t border-[#35C8FF]/65" />
 
-              <Link
-                to="/team"
-                className="
-                  inline-block
-                  px-6 py-3 rounded-md
-                  border-2 border-[#E3D5B3]/50
-                  bg-black/25
-                  text-[#E3D5B3]
-                  font-['Playfair_Display']
-                  shadow-[0_10px_30px_rgba(0,0,0,0.45)]
-                  hover:border-[#E3D5B3]/85 hover:bg-black/35
-                  transition
-                "
-              >
-                View All Team Members
-              </Link>
+              <span className="pointer-events-none absolute right-5 top-5 h-8 w-8 border-r border-t border-[#35C8FF]/65" />
             </div>
-          </div>
+
+            <span className="pointer-events-none absolute -bottom-3 -left-3 h-10 w-10 border-b border-l border-[#147BFF]/45" />
+          </motion.div>
+
+          {/* Team information panel */}
+          <motion.div
+            className="relative flex flex-col justify-center border border-white/[0.08] bg-[#070A0F]/80 p-6 sm:p-8 lg:border-l-0 lg:p-10"
+            initial={reduceMotion ? false : { opacity: 0, x: 40 }}
+            animate={
+              visible
+                ? { opacity: 1, x: 0 }
+                : { opacity: 0, x: 40 }
+            }
+            transition={{
+              duration: 0.9,
+              delay: reduceMotion ? 0 : 0.3,
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[0.6rem] uppercase tracking-[0.28em] text-[#35C8FF]">
+                The people behind the pages
+              </span>
+
+              <span className="h-2 w-2 rounded-full bg-[#147BFF] shadow-[0_0_12px_#147BFF]" />
+            </div>
+
+            <div className="my-7 flex items-center gap-3">
+              <span className="h-px w-16 bg-[#35C8FF]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#147BFF]" />
+            </div>
+
+            <p className="font-sans text-sm leading-7 text-[#A4AFBC] sm:text-base sm:leading-8">
+              Meet the people responsible for the words, images and design
+              behind every Editorial Board publication.
+            </p>
+
+            <Link
+              to="/team"
+              className="group mt-8 flex h-12 w-full items-center justify-between border border-[#147BFF]/70 bg-[#147BFF]/[0.06] px-5 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-[#F5F7FA] transition duration-300 hover:bg-[#147BFF]"
+            >
+              Meet the Team
+
+              <ArrowUpRight
+                size={17}
+                strokeWidth={1.5}
+                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
+            </Link>
+
+            <span className="pointer-events-none absolute bottom-4 right-4 h-6 w-6 border-b border-r border-[#35C8FF]/35" />
+          </motion.div>
         </div>
       </div>
     </section>
