@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
+import AnimatedEditorialWave from "@/components/AnimatedEditorialWave";
 
 type GlassQuoteProps = {
   inverted?: boolean;
@@ -309,31 +310,10 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Blue energy wave */}
-      <motion.div
-        className="pointer-events-none absolute inset-x-[-14%] bottom-[8.5rem] z-10 h-[22svh] min-h-[150px] max-h-[205px] sm:inset-x-[-4%] sm:bottom-[7rem] sm:h-[31vh] sm:max-h-[320px]"
-        animate={
-          reduceMotion
-            ? undefined
-            : {
-                x: ["-1.1%", "1.1%", "-1.1%"],
-                y: [0, -8, 0],
-              }
-        }
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        aria-hidden="true"
-      >
-        <img
-          src="/editorial-wave.webp"
-          alt=""
-          className="h-full w-full select-none object-fill drop-shadow-[0_0_18px_rgba(0,105,255,.34)]"
-          draggable={false}
-        />
-      </motion.div>
+      {/* Infinite animated wave */}
+      <div className="pointer-events-none absolute inset-x-[-14%] bottom-[8.5rem] z-10 h-[22svh] min-h-[150px] max-h-[205px] sm:inset-x-[-4%] sm:bottom-[7rem] sm:h-[31vh] sm:max-h-[320px]">
+        <AnimatedEditorialWave />
+      </div>
 
       {/* Opening quotation */}
       <motion.div
