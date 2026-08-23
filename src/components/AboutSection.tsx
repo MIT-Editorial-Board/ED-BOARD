@@ -1,181 +1,326 @@
-import { useEffect, forwardRef } from "react";
+import {
+  forwardRef,
+  useRef,
+  type ForwardedRef,
+  type MutableRefObject,
+} from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { BookOpen, PenTool, Users } from "lucide-react";
 
-const AboutSection = forwardRef<HTMLDivElement>((_, ref) => {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.1 }
-    );
+const pillars = [
+  {
+    number: "01",
+    title: "Yearbook Production",
+    description:
+      "We design, curate and publish the annual yearbook, preserving the defining moments and memories of every academic year.",
+    icon: BookOpen,
+  },
+  {
+    number: "02",
+    title: "Content Creation",
+    description:
+      "Our writers, photographers and designers create stories that document student life, achievements and campus culture.",
+    icon: PenTool,
+  },
+  {
+    number: "03",
+    title: "Community Engagement",
+    description:
+      "We organise events, photoshoots and creative campaigns that bring the MIT community together.",
+    icon: Users,
+  },
+];
 
-    const elements = document.querySelectorAll(".appear-on-scroll");
-    elements.forEach((el) => observer.observe(el));
+const AboutSection = forwardRef<HTMLDivElement>(
+  (_, forwardedRef: ForwardedRef<HTMLDivElement>) => {
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const reduceMotion = useReducedMotion();
 
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
+    const isInView = useInView(sectionRef, {
+      once: true,
+      margin: "-10% 0px",
+    });
+
+    const visible = reduceMotion || isInView;
+
+    const setRefs = (node: HTMLDivElement | null) => {
+      sectionRef.current = node;
+
+      if (typeof forwardedRef === "function") {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        (forwardedRef as MutableRefObject<HTMLDivElement | null>).current = node;
+      }
     };
-  }, []);
 
-  return (
-    <section
-      ref={ref}
-      id="about"
-      className="py-20 bg-black text-[#C2B59B] relative overflow-hidden"
-    >
-      {/* subtle vignette */}
-      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_220px_rgba(0,0,0,0.9)]" />
+    return (
+      <section
+        id="about"
+        className="relative overflow-hidden border-t border-white/[0.06] bg-[#07090D] text-[#F5F7FA]"
+      >
+        {/* Background grid */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(53,200,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(53,200,255,0.08) 1px, transparent 1px)",
+            backgroundSize: "74px 74px",
+            maskImage:
+              "linear-gradient(to bottom, black, transparent 75%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black, transparent 75%)",
+          }}
+          aria-hidden="true"
+        />
 
-      <div className="container mx-auto px-6 relative">
-        <h2 className="text-center mb-16 relative appear-on-scroll">
-          <span className="font-['Cinzel'] text-[#E3D5B3] uppercase tracking-[0.08em] text-3xl md:text-4xl">
-            What We Do
-          </span>
-          <div className="mx-auto mt-4 h-[2px] w-28 bg-[#E3D5B3]/40 rounded-full" />
-        </h2>
+        {/* Blue atmospheric glow */}
+        <div
+          className="pointer-events-none absolute -left-52 top-[18%] h-[34rem] w-[34rem] rounded-full opacity-25 blur-[150px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(20,123,255,0.28), transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <div className="appear-on-scroll">
-            <h3 className="font-['Cinzel'] text-[#E3D5B3] text-2xl md:text-3xl mb-4 tracking-wide">
-              What is EdBoard?
-            </h3>
+        <div
+          className="pointer-events-none absolute -right-60 bottom-[8%] h-[38rem] w-[38rem] rounded-full opacity-20 blur-[160px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(53,200,255,0.22), transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
 
-            <p className="font-['Playfair_Display'] text-[#C2B59B] mb-6 leading-relaxed">
-              The Editorial Board is the creative powerhouse of MIT Manipal,
-              dedicated to documenting and showcasing the vibrant campus life
-              through various mediums. We're responsible for crafting the
-              yearbook that captures the essence of each academic year,
-              publishing regular newsletters that keep the community informed,
-              and creating content that celebrates student achievements.
-            </p>
+        <div
+          ref={setRefs}
+          className="relative z-10 mx-auto max-w-[96rem] px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36"
+        >
+          {/* Section metadata */}
+          <motion.div
+            className="mb-9 flex items-center justify-between border-b border-white/[0.08] pb-4 sm:mb-12"
+            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            animate={
+              visible
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 18 }
+            }
+            transition={{ duration: 0.7 }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="h-px w-8 bg-[#147BFF]" />
 
-            <p className="font-['Playfair_Display'] text-[#C2B59B] leading-relaxed">
-              With a team of passionate writers, photographers, designers, and
-              creative minds, we work collaboratively to create publications
-              that reflect the spirit and culture of MIT Manipal, ensuring that
-              every memorable moment is preserved for years to come.
-            </p>
+              <span className="font-sans text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-[#35C8FF] sm:text-[0.68rem]">
+                About EdBoard
+              </span>
+            </div>
+
+            <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-[#A4AFBC]/55 sm:text-[0.65rem]">
+              Section / 01
+            </span>
+          </motion.div>
+
+          {/* Main display heading */}
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 45 }}
+            animate={
+              visible
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 45 }
+            }
+            transition={{
+              duration: 0.9,
+              delay: reduceMotion ? 0 : 0.1,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <h2
+              className="font-display text-[clamp(4.1rem,16vw,9rem)] font-normal uppercase leading-[0.8] tracking-[-0.015em]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(115deg, #FFFFFF 0%, #AEB4BC 30%, #F5F7FA 50%, #777F89 72%, #DDE3EA 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+                textShadow: "0 0 35px rgba(255,255,255,0.05)",
+              }}
+            >
+              <span className="block">We Document</span>
+              <span className="block">What Matters</span>
+            </h2>
+          </motion.div>
+
+          {/* Introduction */}
+          <div className="mt-14 grid gap-10 lg:mt-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+            {/* Team image */}
+            <motion.div
+              className="relative"
+              initial={reduceMotion ? false : { opacity: 0, x: -35 }}
+              animate={
+                visible
+                  ? { opacity: 1, x: 0 }
+                  : { opacity: 0, x: -35 }
+              }
+              transition={{
+                duration: 0.85,
+                delay: reduceMotion ? 0 : 0.2,
+              }}
+            >
+              <div className="relative overflow-hidden border border-[#147BFF]/25 bg-[#05070A]">
+                <img
+                  src="/Group pic.jpg"
+                  alt="MIT Editorial Board team"
+                  loading="lazy"
+                  className="aspect-[16/10] w-full object-cover object-center brightness-[0.78] saturate-[0.8] transition duration-700 hover:scale-[1.025] hover:brightness-90"
+                />
+
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(20,123,255,0.12), transparent 45%, rgba(0,0,0,0.4))",
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div
+                  className="pointer-events-none absolute inset-0 shadow-[inset_0_0_90px_rgba(0,0,0,0.65)]"
+                  aria-hidden="true"
+                />
+
+                <div className="absolute bottom-0 left-0 border-r border-t border-[#35C8FF]/45 bg-[#030507]/80 px-4 py-3 backdrop-blur-md">
+                  <span className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-[#F5F7FA]">
+                    The people behind the pages
+                  </span>
+                </div>
+              </div>
+
+              {/* Image crop marks */}
+              <span className="pointer-events-none absolute -left-3 -top-3 h-8 w-8 border-l border-t border-[#35C8FF]/55" />
+              <span className="pointer-events-none absolute -bottom-3 -right-3 h-8 w-8 border-b border-r border-[#35C8FF]/55" />
+
+              <div className="mt-4 flex items-center justify-between">
+                <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-[#A4AFBC]/55">
+                  MIT Manipal
+                </span>
+
+                <span className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#35C8FF] shadow-[0_0_9px_#35C8FF]" />
+                  <span className="font-mono text-[0.58rem] uppercase tracking-[0.25em] text-[#A4AFBC]/55">
+                    Editorial collective
+                  </span>
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Text */}
+            <motion.div
+              className="flex flex-col justify-center"
+              initial={reduceMotion ? false : { opacity: 0, x: 35 }}
+              animate={
+                visible
+                  ? { opacity: 1, x: 0 }
+                  : { opacity: 0, x: 35 }
+              }
+              transition={{
+                duration: 0.85,
+                delay: reduceMotion ? 0 : 0.3,
+              }}
+            >
+              <span className="mb-5 font-mono text-[0.62rem] uppercase tracking-[0.34em] text-[#35C8FF]">
+                MIT Editorial Board
+              </span>
+
+              <h3 className="max-w-xl font-display text-[clamp(2.7rem,6vw,5rem)] font-normal uppercase leading-[0.88] tracking-[0.01em] text-[#F5F7FA]">
+                What is
+                <span className="block text-[#4D7CF3]">Edboard?</span>
+              </h3>
+
+              <div className="my-7 flex items-center gap-3">
+                <span className="h-px w-16 bg-[#35C8FF]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#147BFF]" />
+              </div>
+
+              <p className="max-w-xl font-sans text-sm leading-7 text-[#A4AFBC] sm:text-base sm:leading-8">
+                The Editorial Board is the creative collective of MIT Manipal,
+                dedicated to documenting and showcasing campus life through
+                publications, photography, design and storytelling.
+              </p>
+
+              <p className="mt-5 max-w-xl font-sans text-sm leading-7 text-[#A4AFBC] sm:text-base sm:leading-8">
+                Our writers, photographers, designers and creative teams work
+                together to produce the annual yearbook, publish newsletters
+                and preserve the moments that define each academic year.
+              </p>
+            </motion.div>
           </div>
 
-          <div className="appear-on-scroll">
-            <div className="relative">
-              {/* soft parchment glows */}
-              <div className="absolute -top-6 -left-6 w-28 h-28 bg-[#E3D5B3]/10 rounded-full blur-2xl" />
-              <div className="absolute -bottom-6 -right-6 w-36 h-36 bg-[#E3D5B3]/5 rounded-full blur-2xl" />
+          {/* Capabilities */}
+          <div className="mt-20 border-t border-white/[0.08] pt-6 sm:mt-28 lg:mt-36">
+            <div className="mb-8 flex items-center justify-between">
+              <span className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.32em] text-[#35C8FF]">
+                What we create
+              </span>
+            </div>
 
-              <img
-                src="/Group pic.jpg"
-                alt="Editorial Board Team"
-                className="rounded-lg shadow-2xl border border-[#E3D5B3]/20 w-full h-auto object-cover transform hover:scale-[1.01] transition-transform duration-300"
-                style={{ maxHeight: "400px" }}
-              />
+            <div className="grid border-l border-t border-white/[0.08] md:grid-cols-3">
+              {pillars.map((pillar, index) => {
+                const Icon = pillar.icon;
 
-              {/* edge vignette on image */}
-              <div className="pointer-events-none absolute inset-0 rounded-lg shadow-[inset_0_0_120px_rgba(0,0,0,0.6)]" />
+                return (
+                  <motion.article
+                    key={pillar.number}
+                    className="group relative min-h-[270px] overflow-hidden border-b border-r border-white/[0.08] bg-[#05070A]/55 p-6 transition-colors duration-500 hover:bg-[#0A101A] sm:p-8"
+                    initial={reduceMotion ? false : { opacity: 0, y: 30 }}
+                    animate={
+                      visible
+                        ? { opacity: 1, y: 0 }
+                        : { opacity: 0, y: 30 }
+                    }
+                    transition={{
+                      duration: 0.7,
+                      delay: reduceMotion ? 0 : 0.4 + index * 0.12,
+                    }}
+                    whileHover={reduceMotion ? undefined : { y: -5 }}
+                  >
+                    <div
+                      className="pointer-events-none absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-gradient-to-r from-[#147BFF] via-[#35C8FF] to-transparent transition-transform duration-500 group-hover:scale-x-100"
+                      aria-hidden="true"
+                    />
+
+                    <div className="flex items-start justify-between">
+                      <span className="font-mono text-xs tracking-[0.2em] text-[#147BFF]">
+                        {pillar.number}
+                      </span>
+
+                      <div className="flex h-11 w-11 items-center justify-center border border-[#147BFF]/30 bg-[#147BFF]/[0.06] text-[#35C8FF] transition duration-500 group-hover:border-[#35C8FF]/60 group-hover:bg-[#147BFF]/15">
+                        <Icon size={19} strokeWidth={1.5} />
+                      </div>
+                    </div>
+
+                    <div className="mt-12">
+                      <h4 className="font-display text-[2rem] font-normal uppercase leading-none tracking-[0.015em] text-[#F5F7FA]">
+                        {pillar.title}
+                      </h4>
+
+                      <p className="mt-5 font-sans text-sm leading-7 text-[#A4AFBC]">
+                        {pillar.description}
+                      </p>
+                    </div>
+
+                    <span className="absolute bottom-5 right-5 h-5 w-5 border-b border-r border-[#147BFF]/35 transition-colors group-hover:border-[#35C8FF]/70" />
+                  </motion.article>
+                );
+              })}
             </div>
           </div>
         </div>
+      </section>
+    );
+  },
+);
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Card 1 */}
-          <div className="rounded-lg p-6 appear-on-scroll border border-[#E3D5B3]/20 bg-black/40 backdrop-blur-sm shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
-            <div className="w-14 h-14 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center mb-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#E3D5B3]"
-              >
-                <path d="M7 16h13M7 8h13M7 12h13M3 8h.01M3 12h.01M3 16h.01" />
-              </svg>
-            </div>
-
-            <h4 className="font-['Cinzel'] text-[#E3D5B3] text-xl mb-3 tracking-wide">
-              Yearbook Production
-            </h4>
-            <p className="font-['Playfair_Display'] text-[#C2B59B] leading-relaxed">
-              We design, curate, and publish the annual yearbook, capturing the
-              defining moments and memories of each academic year at MIT Manipal.
-            </p>
-          </div>
-
-          {/* Card 2 */}
-          <div
-            className="rounded-lg p-6 appear-on-scroll border border-[#E3D5B3]/20 bg-black/40 backdrop-blur-sm shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="w-14 h-14 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center mb-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#E3D5B3]"
-              >
-                <rect x="2" y="2" width="20" height="20" rx="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <path d="M17.5 6.5L17.5 6.5" />
-              </svg>
-            </div>
-
-            <h4 className="font-['Cinzel'] text-[#E3D5B3] text-xl mb-3 tracking-wide">
-              Content Creation
-            </h4>
-            <p className="font-['Playfair_Display'] text-[#C2B59B] leading-relaxed">
-              Our talented team creates engaging articles, photography,
-              videography, and design work that showcases student life and
-              activities.
-            </p>
-          </div>
-
-          {/* Card 3 */}
-          <div
-            className="rounded-lg p-6 appear-on-scroll border border-[#E3D5B3]/20 bg-black/40 backdrop-blur-sm shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
-            style={{ animationDelay: "0.4s" }}
-          >
-            <div className="w-14 h-14 rounded-full border border-[#E3D5B3]/30 bg-black/40 flex items-center justify-center mb-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#E3D5B3]"
-              >
-                <path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v5Z" />
-                <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1" />
-              </svg>
-            </div>
-
-            <h4 className="font-['Cinzel'] text-[#E3D5B3] text-xl mb-3 tracking-wide">
-              Community Engagement
-            </h4>
-            <p className="font-['Playfair_Display'] text-[#C2B59B] leading-relaxed">
-              We organize events, photoshoots, and campaigns that bring together
-              the MIT community and create memorable shared experiences.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-});
+AboutSection.displayName = "AboutSection";
 
 export default AboutSection;
+
