@@ -6,12 +6,11 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, BookOpen, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const FORM_URL = "https://forms.gle/sArbt8gRsbtpXda86";
-
-const INITIAL_DELAY = 60_500;
-const REOPEN_DELAY = 3_000_000;
-const STORAGE_KEY = "mc_popup_last_closed";
+const INITIAL_DELAY = 3_500;
+const REOPEN_DELAY = 10_000;
+const STORAGE_KEY = "newsletter_popup_last_closed";
 
 const YearbookPopup = () => {
   const [open, setOpen] = useState(false);
@@ -88,13 +87,13 @@ const YearbookPopup = () => {
           className="fixed inset-0 z-[100] flex items-center justify-center px-4"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="committee-popup-title"
+          aria-labelledby="newsletter-popup-title"
         >
           <button
             type="button"
             className="absolute inset-0 cursor-default bg-[#020305]/85 backdrop-blur-md"
             onClick={closePopup}
-            aria-label="Close application popup"
+            aria-label="Close newsletter popup"
           />
 
           <motion.div
@@ -133,38 +132,37 @@ const YearbookPopup = () => {
                   <span className="h-px w-9 bg-[#35C8FF]" />
 
                   <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#35C8FF]">
-                    Applications
+                    Latest Edition
                   </span>
                 </div>
 
                 <h2
-                  id="committee-popup-title"
+                  id="newsletter-popup-title"
                   className="font-display text-4xl uppercase leading-[0.92] tracking-wide text-[#F5F7FA] sm:text-5xl"
                 >
-                  Working Committee
+                  Check out the
                   <br />
-                  Forms Open
+                  new newsletter
                 </h2>
               </div>
 
               <p className="mb-7 max-w-sm font-sans text-sm leading-6 text-[#A4AFBC] sm:text-base sm:leading-7">
-                Applications for the EdBoard Working Committee are now open.
+                Explore the latest newsletter from the MIT Editorial Board,
+                along with previous editions.
               </p>
 
-              <a
-                href={FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/newsletters"
                 onClick={closePopup}
                 className="group flex w-full items-center justify-between border border-[#147BFF] bg-[#147BFF] px-5 py-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white transition hover:border-[#35C8FF] hover:bg-[#35C8FF] hover:text-[#030507] sm:text-xs"
               >
                 <span className="flex items-center gap-3">
                   <BookOpen className="h-4 w-4" />
-                  Apply Now
+                  View Newsletter
                 </span>
 
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-              </a>
+              </Link>
 
               <button
                 type="button"

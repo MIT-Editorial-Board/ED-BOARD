@@ -21,6 +21,7 @@ const Team = lazy(() => import("./pages/Team"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const Yearbook = lazy(() => import("./pages/Yearbook"));
+const Newsletters = lazy(() => import("./pages/Newsletters"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const faviconUrl = "/logo.png";
@@ -79,6 +80,7 @@ const App = () => (
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/yearbook" element={<Yearbook />} />
+              <Route path="/newsletters" element={<Newsletters />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

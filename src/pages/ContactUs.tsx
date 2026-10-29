@@ -67,14 +67,14 @@ const ContactUs = () => {
               </div>
 
               <a
-                href="mailto:edboard2024@gmail.com"
+                href="mailto:editorialboard.mit@manipal.edu"
                 className="group mt-9 flex items-center justify-between gap-4 border-t border-white/10 py-5 text-[#F5F7FA] transition hover:text-[#35C8FF]"
               >
                 <span className="flex min-w-0 items-center gap-3">
                   <Mail className="h-5 w-5 shrink-0 text-[#35C8FF]" />
 
                   <span className="truncate font-sans text-sm sm:text-base">
-                    edboard2024@gmail.com
+                    editorialboard.mit@manipal.edu
                   </span>
                 </span>
 
