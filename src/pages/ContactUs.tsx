@@ -1,4 +1,4 @@
-cd "C:\Users\mrsuh\Desktop\ED-BOARD-CLUB"import { ArrowUpRight, Mail } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
 import { motion } from "framer-motion";
 
