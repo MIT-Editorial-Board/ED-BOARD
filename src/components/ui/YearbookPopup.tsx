@@ -9,7 +9,7 @@ import { ArrowUpRight, BookOpen, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const INITIAL_DELAY = 3_500;
-const REOPEN_DELAY = 10_000;
+const REOPEN_DELAY = 500_000;
 const STORAGE_KEY = "newsletter_popup_last_closed";
 
 const YearbookPopup = () => {
