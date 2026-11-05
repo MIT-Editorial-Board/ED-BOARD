@@ -45,7 +45,7 @@ const NewsletterCard = ({ newsletter, index }: NewsletterCardProps) => {
 
         <div className="absolute right-4 top-4 border border-white/15 bg-[#030507]/80 px-3 py-2 backdrop-blur-md">
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#A4AFBC]">
-            {newsletter.pages} pages
+            {newsletter.pages}{newsletter.pagesMinimum ? "+" : ""} pages
           </span>
         </div>
 

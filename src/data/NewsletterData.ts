@@ -5,6 +5,7 @@ export interface NewsletterData {
   title: string;
   description: string;
   pages: number;
+  pagesMinimum?: boolean;
   pdfUrl: string;
   coverImage: string;
   coverWidth: number;
@@ -13,6 +14,20 @@ export interface NewsletterData {
 
 // Keep newest issues first. Add future editions here; filters and totals update automatically.
 export const newslettersData: NewsletterData[] = [
+  {
+    "id": "2026",
+    "label": "2026",
+    "year": "2026",
+    "title": "MIT Newsletter 2026",
+    "description": "The 2026 edition of the MIT Editorial Board newsletter.",
+    // The supplied cover states over 25 pages; the attachment is only an excerpt.
+    "pages": 25,
+    "pagesMinimum": true,
+    "pdfUrl": "https://learnermanipal-my.sharepoint.com/:b:/g/personal/editorialboard_mit_manipal_edu/IQAtoU2dTHICQr44EzoMQUclAcWM3AmE6z1Y3XJGm7HAsT0?e=6fQTeL",
+    "coverImage": "/newsletters/covers/2026.webp",
+    "coverWidth": 751,
+    "coverHeight": 1000
+  },
   {
     "id": "may-2025",
     "label": "May 2025",

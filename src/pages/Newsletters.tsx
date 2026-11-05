@@ -31,7 +31,7 @@ const Newsletters = () => {
       icon: Calendar,
     },
     {
-      value: newslettersData.reduce((total, newsletter) => total + newsletter.pages, 0),
+      value: `${newslettersData.reduce((total, newsletter) => total + newsletter.pages, 0)}${newslettersData.some((newsletter) => newsletter.pagesMinimum) ? "+" : ""}`,
       label: "Pages to Explore",
       icon: FileText,
     },
